@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 
-import { createEditor, Descendant, Editor, Transforms } from 'slate';
+import { createEditor, Descendant, Transforms } from 'slate';
 import { Slate, Editable, withReact, RenderElementProps, RenderLeafProps } from 'slate-react';
 
 import { withHistory } from 'slate-history';
