@@ -1,6 +1,8 @@
 import { Editor, Transforms, Text } from 'slate';
 import { CustomBlockStrings, CustomMarkupStrings } from '../types/slate';
 
+/* Block Helpers */
+
 export const isBlockActive = (editor: Editor, blockType: CustomBlockStrings) => {
   if (!editor.selection) return false;
   const [match] = Array.from(
@@ -19,6 +21,8 @@ export const toggleCurrentBlock = (editor: Editor, type: CustomBlockStrings) => 
     { match: (n) => Editor.isBlock(editor, n) }
   );
 };
+
+/* Markup Helpers */
 
 export const isMarkActive = (editor: Editor, format: CustomMarkupStrings) => {
   const marks = Editor.marks(editor);

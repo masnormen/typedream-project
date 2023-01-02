@@ -1,7 +1,9 @@
 import { useCallback, useState } from 'react';
 
-import { createEditor, Editor, Transforms } from 'slate';
+import { createEditor, Descendant, Editor, Transforms } from 'slate';
 import { Slate, Editable, withReact, RenderElementProps, RenderLeafProps } from 'slate-react';
+
+import { withHistory } from 'slate-history';
 
 import Head from 'next/head';
 
@@ -10,6 +12,7 @@ import ELEMENTS from '../components/Blocks';
 
 import { CustomBlockStrings, CustomMarkupStrings } from '../types/slate';
 import { toggleCurrentBlock, toggleMarkup } from '../lib/RichTextHelper';
+
 
 export type MarkupMap = Record<
   CustomMarkupStrings,
@@ -21,7 +24,7 @@ export type MarkupMap = Record<
   }
 >
 
-const MARKUPS: MarkupMap = {
+export const MARKUPS: MarkupMap = {
   bold: {
     key: ['ctrl', 'b'],
     symbol: 'B',
@@ -40,7 +43,7 @@ const MARKUPS: MarkupMap = {
 };
 
 export default function Home() {
-  const [editor] = useState(() => withReact(createEditor()));
+  const [editor] = useState(() => withReact(withHistory(createEditor())));
 
   const renderBlockElement = useCallback((props: RenderElementProps) => {
     if (props.element.type === undefined) {
@@ -73,8 +76,15 @@ export default function Home() {
       </Head>
 
       <main className="flex flex-col bg-slate-700 items-center min-h-screen p-16">
+        <h1 className="text-4xl pb-14 font-bold text-white">
+          <span className='text-red-200'>Type</span>
+          <span className='text-blue-200'>Mimpi</span>
+        </h1>
         <div className="flex flex-col w-full bg-white border-red-400 border-4 rounded-md shadow-xl">
-          <Slate editor={editor} value={initialValue}>
+          <Slate
+            editor={editor}
+            value={initialValue}
+          >
             {/* Rich Text Toolbar */}
             <aside id="toolbar" className="py-6 px-8 bg-red-400 space-x-2">
               {Object.entries(MARKUPS).map(([name, value]) => {
@@ -129,29 +139,28 @@ export default function Home() {
                 else if (event.shiftKey && event.key === 'Enter') {
                   event.preventDefault();
                   Transforms.insertText(editor, '\n');
-                } else if (event.key === 'Enter') {
-                  // Always insert empty paragraph at the end of the document
-                  event.preventDefault();
-                  Transforms.insertNodes(editor, {
-                    type: 'paragraph',
-                    children: [{ text: '' }],
-                  }, {
-                    match: n => Editor.isBlock(editor, n),
-                  });
                 }
               }}
+
             />
           </Slate>
+        </div>
+
+        <div className="w-full h-full p-8 space-y-4 text-center">
+          <span className="font-bold text-white">Nourman Hajar</span>
         </div>
       </main>
     </>
   );
 }
 
-const initialValue: any[] = [
+const initialValue: Descendant[] = [
   {
     type: 'h1',
-    children: [{ text: 'Welcome to TypeMimpi, your rich-text editor!' }],
+    children: [
+      { text: 'Welcome to ' },
+      { text: 'TypeMimpi', italic: true },
+      { text: ', your simple rich-text editor!' }],
   },
   {
     type: 'quote',
@@ -159,7 +168,16 @@ const initialValue: any[] = [
   },
   {
     type: 'paragraph',
-    children: [{ text: 'This page will give you a showcase of how to can use this rich text editor 😄' }],
+    children: [{ text: 'This page will give you a showcase of how you can use this rich text editor 😄' }],
+  },
+  {
+    type: 'paragraph',
+    children: [
+      { text: 'You can make ' },
+      { text: 'A BIG BOLD TEXT', bold: true },
+      { text: ' or make it ' },
+      { text: 'slanted like Michael Jackson\'s dancing.', italic: true },
+    ]
   },
   {
     type: 'h2',
@@ -167,7 +185,17 @@ const initialValue: any[] = [
   },
   {
     type: 'paragraph',
-    children: [{ text: 'Try clicking the "H1" toolbar on the top or press the key Ctrl+1.' }],
+    children: [
+      { text: 'Try clicking the "H1" toolbar on the top or press the key ' },
+      { text: 'Ctrl+1.', code: true }
+    ],
+  },
+  {
+    type: 'paragraph',
+    children: [
+      { text: 'For keyboard shortcuts, hover to the buttons above! Try highlighting some text and press ' },
+      { text: 'Ctrl+B.', code: true }
+    ],
   },
   {
     type: 'paragraph',
@@ -178,7 +206,7 @@ const initialValue: any[] = [
     children: [
       { text: 'You can also add ' },
       { text: 'console.log("a code here!")', code: true },
-      { text: '. Cool, eh?' }
+      { text: '. Wow.' }
     ],
   },
   {
@@ -187,16 +215,7 @@ const initialValue: any[] = [
   },
   {
     type: 'code',
-    children: [{ text: 'console.log("Wow, this works!")' }],
-  },
-  {
-    type: 'paragraph',
-    children: [
-      { text: 'You can also add ' },
-      { text: 'make a bold text', bold: true },
-      { text: ' or make it ' },
-      { text: 'slanted like Michael Jackson\'s dancing.', italic: true },
-    ]
+    children: [{ text: 'console.log("Typedream is awesome 🫶")' }],
   },
   {
     type: 'paragraph',
