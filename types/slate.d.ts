@@ -14,6 +14,8 @@ export type ParagraphElement = {
 
 type CustomElement = QuoteElement | ParagraphElement;
 
+export type CustomTypeStrings = CustomElement['type'];
+
 export type CustomText = {
   text: string;
 };
