@@ -1,7 +1,7 @@
 import Head from 'next/head';
 
 // Import the Slate editor factory.
-import { createEditor, Editor, Transforms } from 'slate';
+import { createEditor } from 'slate';
 
 // Import the Slate components and React plugin.
 import { Slate, Editable, withReact, DefaultElement } from 'slate-react';
